@@ -7,7 +7,6 @@ import com.loodeer.response.CommonResult;
 import com.loodeer.service.UserService;
 import com.loodeer.service.model.UserModel;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +19,7 @@ import javax.annotation.Resource;
  */
 @Controller("user")
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends BaseController{
 
         @Resource
         private UserService userService;
@@ -44,4 +43,5 @@ public class UserController {
                 BeanUtils.copyProperties(userModel, userVO);
                 return userVO;
         }
+
 }
