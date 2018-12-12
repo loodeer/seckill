@@ -1,6 +1,9 @@
 package com.loodeer.controller;
 
 import com.loodeer.controller.viewObject.UserVO;
+import com.loodeer.error.BussinessException;
+import com.loodeer.error.EmBussinessError;
+import com.loodeer.response.CommonResult;
 import com.loodeer.service.UserService;
 import com.loodeer.service.model.UserModel;
 import org.springframework.beans.BeanUtils;
@@ -24,9 +27,13 @@ public class UserController {
 
         @RequestMapping("/get")
         @ResponseBody
-        public UserVO getUser(@RequestParam(name="id") Integer id) {
+        public CommonResult getUser(@RequestParam(name="id") Integer id) throws BussinessException {
                UserModel userModel = userService.getUserById(id);
-               return convertFromModel(userModel);
+               UserVO userVO = convertFromModel(userModel);
+               if (userVO == null) {
+                       throw new BussinessException(EmBussinessError.USER_NOT_EXIT);
+               }
+               return CommonResult.create(userVO);
         }
 
         private UserVO convertFromModel(UserModel userModel) {
