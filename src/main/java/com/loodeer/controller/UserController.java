@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Random;
 
 /**
  * @author loodeer
@@ -24,6 +26,9 @@ public class UserController extends BaseController{
         @Resource
         private UserService userService;
 
+        @Resource
+        private HttpServletRequest httpServletRequest;
+
         @RequestMapping("/get")
         @ResponseBody
         public CommonResult getUser(@RequestParam(name="id") Integer id) throws BussinessException {
@@ -33,6 +38,28 @@ public class UserController extends BaseController{
                        throw new BussinessException(EmBussinessError.USER_NOT_EXIT);
                }
                return CommonResult.create(userVO);
+        }
+
+        /**
+         * 用户获取 otp 短信
+         * @param telphone 手机号
+         * @return CommonResult
+         */
+        @RequestMapping("/getOtp")
+        @ResponseBody
+        public CommonResult getOtp(@RequestParam(name="telphone") String telphone) {
+                // 1. 生成验证码
+                Random random = new Random();
+                int randomInt = random.nextInt(88888);
+                randomInt += 10000;
+                String otpCode = String.valueOf(randomInt);
+
+                // 2. 服务端记录手机号和验证码关联
+                httpServletRequest.getSession().setAttribute(telphone, otpCode);
+
+                // 3. 发送短信给用户
+                System.out.println("telphone:" + telphone + ";otpCode:" + otpCode);
+                return CommonResult.create(null);
         }
 
         private UserVO convertFromModel(UserModel userModel) {
