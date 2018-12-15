@@ -8,7 +8,9 @@ import com.loodeer.service.UserService;
 import com.loodeer.service.model.UserModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,6 +23,7 @@ import java.util.Random;
  */
 @Controller("user")
 @RequestMapping("/user")
+@CrossOrigin
 public class UserController extends BaseController{
 
         @Resource
@@ -45,7 +48,7 @@ public class UserController extends BaseController{
          * @param telphone 手机号
          * @return CommonResult
          */
-        @RequestMapping("/getOtp")
+        @RequestMapping(value = "getotp", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
         @ResponseBody
         public CommonResult getOtp(@RequestParam(name="telphone") String telphone) {
                 // 1. 生成验证码
