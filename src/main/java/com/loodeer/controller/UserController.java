@@ -1,11 +1,13 @@
 package com.loodeer.controller;
 
+import com.alibaba.druid.util.StringUtils;
 import com.loodeer.controller.viewObject.UserVO;
 import com.loodeer.error.BussinessException;
 import com.loodeer.error.EmBussinessError;
 import com.loodeer.response.CommonResult;
 import com.loodeer.service.UserService;
 import com.loodeer.service.model.UserModel;
+import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -41,6 +43,34 @@ public class UserController extends BaseController{
                        throw new BussinessException(EmBussinessError.USER_NOT_EXIT);
                }
                return CommonResult.create(userVO);
+        }
+
+        @RequestMapping(value = "register", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
+        @ResponseBody
+        public CommonResult register(@RequestParam(name = "telphone") String telphone,
+                @RequestParam(name = "otpCode") String otpCode,
+                @RequestParam(name = "name") String name,
+                @RequestParam(name = "gender") Integer gender,
+                @RequestParam(name = "age") Integer age,
+                @RequestParam(name = "password") String password) throws BussinessException {
+
+                // 1. 验证手机号与验证码配对
+                String inSessionOtpCode = (String) this.httpServletRequest.getSession().getAttribute(telphone);
+                if (!StringUtils.equals(inSessionOtpCode, otpCode)) {
+                        throw new BussinessException(EmBussinessError.PARAM_INVALID, "短信验证码错误");
+                }
+
+                // 2. 用户注册
+                UserModel userModel = new UserModel();
+                userModel.setName(name);
+                userModel.setGender(gender);
+                userModel.setAge(age);
+                userModel.setTelphone(telphone);
+                userModel.setRegisterMode(1);
+                userModel.setEncrptPassword(MD5Encoder.encode(password.getBytes()));
+
+                userService.register(userModel);
+                return CommonResult.create(null);
         }
 
         /**

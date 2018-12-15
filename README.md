@@ -7,4 +7,6 @@
     - jquery 使用
     - CrossOrigin 注解
 
-- 用户注册
+- 用户注册接口
+    - apache-common-lang 包使用
+    - Transactional 事务注解
