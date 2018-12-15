@@ -37,9 +37,11 @@
                data: {
                    "telphone": telphone,
                },
+               xhrFields: {withCredentials: true},
                success: function (data) {
                     if (data.status == "success") {
                         alert("短信验证码已经发送到了您的手机上，请注意查收");
+                        window.location.href = "register.html";
                     } else {
                         alert("短信验证码发送失败,原因为" + data.data.errMsg);
                     }

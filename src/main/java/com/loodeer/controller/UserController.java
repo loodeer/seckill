@@ -15,9 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 /**
@@ -25,7 +29,7 @@ import java.util.Random;
  */
 @Controller("user")
 @RequestMapping("/user")
-@CrossOrigin
+@CrossOrigin(allowCredentials="true", allowedHeaders = "*")
 public class UserController extends BaseController{
 
         @Resource
@@ -52,7 +56,8 @@ public class UserController extends BaseController{
                 @RequestParam(name = "name") String name,
                 @RequestParam(name = "gender") Integer gender,
                 @RequestParam(name = "age") Integer age,
-                @RequestParam(name = "password") String password) throws BussinessException {
+                @RequestParam(name = "password") String password)
+                throws BussinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
 
                 // 1. 验证手机号与验证码配对
                 String inSessionOtpCode = (String) this.httpServletRequest.getSession().getAttribute(telphone);
@@ -67,10 +72,17 @@ public class UserController extends BaseController{
                 userModel.setAge(age);
                 userModel.setTelphone(telphone);
                 userModel.setRegisterMode(1);
-                userModel.setEncrptPassword(MD5Encoder.encode(password.getBytes()));
+                userModel.setEncrptPassword(EncodeByMd5(password));
 
                 userService.register(userModel);
                 return CommonResult.create(null);
+        }
+
+        private String EncodeByMd5(String str) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+                MessageDigest md5 = MessageDigest.getInstance("MD5");
+                BASE64Encoder base64Encoder = new BASE64Encoder();
+                String newStr = base64Encoder.encode(md5.digest(str.getBytes("utf-8")));
+                return newStr;
         }
 
         /**

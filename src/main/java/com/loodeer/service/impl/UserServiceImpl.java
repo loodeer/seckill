@@ -10,6 +10,7 @@ import com.loodeer.service.UserService;
 import com.loodeer.service.model.UserModel;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +46,13 @@ public class UserServiceImpl implements UserService {
                 }
 
                 UserDO userDO = convertFromModel(userModel);
-                userDOMapper.insertSelective(userDO);
+                try {
+                        userDOMapper.insertSelective(userDO);
+                } catch (DuplicateKeyException ex) {
+                        throw new BussinessException(EmBussinessError.PARAM_INVALID, "手机号已经注册");
+                }
+
+                userModel.setId(userDO.getId());
 
                 UserPasswordDO userPasswordDO = convertPasswordFromModel(userModel);
                 userPasswordDOMapper.insertSelective(userPasswordDO);
@@ -53,9 +60,13 @@ public class UserServiceImpl implements UserService {
                 return;
         }
 
-        private UserPasswordDO convertPasswordFromModel(UserModel userModel) {
+        private UserPasswordDO convertPasswordFromModel(UserModel userModel) throws BussinessException {
                 if (userModel == null) {
                         return null;
+                }
+
+                if (userModel.getEncrptPassword() == null) {
+                        throw new BussinessException(EmBussinessError.PARAM_INVALID, "密码不能为空");
                 }
 
                 UserPasswordDO userPasswordDO = new UserPasswordDO();
