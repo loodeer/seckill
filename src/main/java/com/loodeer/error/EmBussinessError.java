@@ -7,7 +7,9 @@ public enum EmBussinessError implements CommonError {
         UNKNOW_ERROR(10002, "未知错误"),
 
         // 2 开头为用户错误
-        USER_NOT_EXIT(20001, "用户不存在")
+        USER_NOT_EXIT(20001, "用户不存在"),
+        USER_LOGIN_FAIL(20002, "登陆手机号或密码错误")
+
         ;
 
         private int errCode;

@@ -49,6 +49,26 @@ public class UserController extends BaseController{
                return CommonResult.create(userVO);
         }
 
+        @RequestMapping(value = "login", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
+        @ResponseBody
+        public CommonResult login(@RequestParam(name = "telphone") String telphone,
+                @RequestParam(name = "password") String password)
+                throws BussinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
+                // 1. 入参校验
+                if (telphone == null || "".equals(telphone)) {
+                        throw new BussinessException(EmBussinessError.PARAM_INVALID, "电话号码不能为空");
+                }
+                if (password == null || "".equals(password)) {
+                        throw new BussinessException(EmBussinessError.PARAM_INVALID, "密码不能为空");
+                }
+                // 2. 登陆验证
+                UserModel userModel = userService.validLogin(telphone, EncodeByMd5(password));
+                // 3. 登陆凭证存到 session 内
+                this.httpServletRequest.getSession().setAttribute("IS_LOGIN", true);
+                this.httpServletRequest.getSession().setAttribute("LOGIN_USER", userModel);
+                return CommonResult.create(null);
+        }
+
         @RequestMapping(value = "register", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
         @ResponseBody
         public CommonResult register(@RequestParam(name = "telphone") String telphone,

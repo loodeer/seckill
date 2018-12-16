@@ -17,3 +17,6 @@
         - allowedHeaders 允许前端将 token 放入 header 做 session 共享的跨域请求。
         - allowCredentials 授信后，需前端也设置 xhfFields 授信才能实现跨域 session 共享。xhrFields: {withCredentials: true}, 
     - insertSelective 中设置 keyProperty="id" useGeneratedKeys="true" 使得插入完后的 DO 生成自增 id 。
+    
+ - 用户登陆接口
+    - Mapper.xml 文件里 parameterType、jdbcType 分别指定入参和数据库字段类型。
