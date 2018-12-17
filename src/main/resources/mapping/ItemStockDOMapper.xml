@@ -117,6 +117,14 @@
     from item_stock
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <select id="selectByItemId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from item_stock
+    where item_id = #{id,jdbcType=INTEGER}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
       WARNING - @mbg.generated

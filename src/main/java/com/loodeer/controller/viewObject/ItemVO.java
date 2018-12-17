@@ -1,27 +1,16 @@
-package com.loodeer.service.model;
+package com.loodeer.controller.viewObject;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class ItemModel {
+public class ItemVO {
         private Integer id;
-
-        @NotBlank(message = "商品名称不能为空")
         private String title;
-
-        @NotNull(message = "商品价格不能为空")
-        @Min(value = 0, message = "商品价格必须大于 0")
         private Integer price;
-
-        @NotNull(message = "库存不能为空")
         private Integer stock;
-
-        @NotBlank(message = "商品描述不能为空")
         private String description;
         private Integer sales;
-
-        @NotBlank(message = "图片不能为空")
         private String imgUrl;
 
         public Integer getId() {

@@ -34,3 +34,5 @@
 - 商品服务 `com.loodeer.service.impl.ItemServiceImpl`
     - 实现类要加上 `@Service` 注解
     - 实现方法要加上 `@Transactional` 注解
+    - `createItem` 方法入参和出参都是 `itemModel` 也是蛮奇怪的
+
