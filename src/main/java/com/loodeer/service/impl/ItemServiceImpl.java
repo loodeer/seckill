@@ -86,7 +86,8 @@ public class ItemServiceImpl implements ItemService {
                         return  null;
                 }
                 ItemStockDO itemStockDO = new ItemStockDO();
-                BeanUtils.copyProperties(itemModel, itemStockDO);
+                itemStockDO.setItemId(itemModel.getId());
+                itemStockDO.setStock(itemModel.getStock());
                 return itemStockDO;
         }
 }

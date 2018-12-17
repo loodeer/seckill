@@ -35,4 +35,7 @@
     - 实现类要加上 `@Service` 注解
     - 实现方法要加上 `@Transactional` 注解
     - `createItem` 方法入参和出参都是 `itemModel` 也是蛮奇怪的
+    
+- 商品创建页面 `html/createitem.html`
+    - 创建成功，item 表 title、description 中文乱码（待解决）
 

@@ -1,9 +1,5 @@
 package com.loodeer.controller.viewObject;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 public class ItemVO {
         private Integer id;
         private String title;

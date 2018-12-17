@@ -9,7 +9,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 
@@ -21,6 +23,8 @@ public class ItemController extends BaseController{
         @Resource
         private ItemService itemService;
 
+        @RequestMapping(value = "/create", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
+        @ResponseBody
         public CommonResult createItem(@RequestParam("title") String title,
                 @RequestParam("description") String description,
                 @RequestParam("price") Integer price,
