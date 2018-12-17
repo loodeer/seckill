@@ -26,3 +26,8 @@
  - 设计商品领域模型 `com.loodeer.service.model.ItemModel`
     - 再设计表结构。 item 表、item_stock 表
     - mybatis generator 自动生成 DO DAO Mapper
+    - Mapper.xml 里面 insert 语句增加 useGeneratedKeys="true" keyProperty="id"
+
+- 商品服务 `com.loodeer.service.impl.ItemServiceImpl`
+    - 实现类要加上 `@Service` 注解
+    - 实现方法要加上 `@Transactional` 注解
