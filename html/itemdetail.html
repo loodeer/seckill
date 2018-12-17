@@ -1,0 +1,91 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link type="text/css" rel="stylesheet" href="bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="components.css">
+    <link type="text/css" rel="stylesheet" href="login.css">
+    <script type="text/javascript" src="jquery-1.11.0.min.js"></script>
+</head>
+<body class="login">
+<div class="content">
+    <h3 class="form-title">商品详情</h3>
+    <div class="form-group">
+        <div>
+            <label class="control-label" type="text" placeholder="商品名" name="title" id="title"></label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label class="control-label" type="text" placeholder="商品描述" name="description" id="description"></label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label">价格</label>
+        <div>
+            <label class="control-label" type="text" placeholder="价格" name="price" id="price"></label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <img id="imgUrl" style="height: 100px;width: auto"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label">库存</label>
+        <div>
+            <label class="control-label" type="text" placeholder="库存" name="stock" id="stock"></label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label">销量</label>
+        <div>
+            <label class="control-label" type="text" placeholder="" name="sales" id="sales"></label>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button class="btn blue" id="create" type="submit">
+            购买
+        </button>
+    </div>
+</div>
+</body>
+<script>
+    var g_item = [];
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    jQuery(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8090/item/get",
+                data: {
+                    "id": getQueryString("id"),
+                },
+                xhrFields: {withCredentials: true},
+                success: function (data) {
+                    if (data.status == "success") {
+                        g_item = data.data;
+                        reload_dom();
+                    } else {
+                        alert("获取失败,原因为" + data.data.errMsg);
+                    }
+                },
+                error: function (data) {
+                    alert("获取失败，原因为" + data.responseText);
+                }
+
+            })
+    });
+
+    function reload_dom() {
+        $("#title").text(g_item.title);
+        $("#description").text(g_item.description);
+        $("#stock").text(g_item.stock);
+        $("#price").text(g_item.price);
+        $("#sales").text(g_item.sales);
+        $("#imgUrl").attr("src", g_item.imgUrl);
+    }
+</script>
+</html>

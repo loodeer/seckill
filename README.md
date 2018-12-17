@@ -38,4 +38,17 @@
     
 - 商品创建页面 `html/createitem.html`
     - 创建成功，item 表 title、description 中文乱码（待解决）
+    
+- 商品详情页 
+    - 分转为元： `BigDecimal.valueOf(itemModel.getPrice()).divide(new BigDecimal(100))`
 
+- 商品列表页 `com.loodeer.controller.ItemController.getItem()`
+    - `List<ItemVO> itemVOList = new ArrayList<>();` 新建 List
+    - `itemModelList.get(i)` 挨个获取 List 的元素
+    
+- 商品列表页 `html/itemlist.html`
+    - 动态渲染 dom 数据
+    - 针对每一行生成一个点击跳转事件，`$(this).data("id")` 解决闭包内无法获取外部变量问题
+
+- 商品详情页 `html/itemdetail.html`
+    - 动态渲染 dom 数据

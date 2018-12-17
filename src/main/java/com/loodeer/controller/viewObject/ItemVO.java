@@ -1,9 +1,11 @@
 package com.loodeer.controller.viewObject;
 
+import java.math.BigDecimal;
+
 public class ItemVO {
         private Integer id;
         private String title;
-        private Integer price;
+        private BigDecimal price;
         private Integer stock;
         private String description;
         private Integer sales;
@@ -25,11 +27,11 @@ public class ItemVO {
                 this.title = title;
         }
 
-        public Integer getPrice() {
+        public BigDecimal getPrice() {
                 return price;
         }
 
-        public void setPrice(Integer price) {
+        public void setPrice(BigDecimal price) {
                 this.price = price;
         }
 

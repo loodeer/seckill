@@ -109,6 +109,12 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="itemList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from item
+    order by sales desc
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated

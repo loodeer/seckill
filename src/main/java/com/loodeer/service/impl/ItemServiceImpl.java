@@ -15,7 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -49,7 +53,15 @@ public class ItemServiceImpl implements ItemService {
         }
 
         @Override public List<ItemModel> listItem() {
-                return null;
+                List<ItemDO> itemDOList = itemDOMapper.itemList();
+                List<ItemModel> itemModelList = new ArrayList<>();
+                for (int i = 0; i < itemDOList.size(); i ++) {
+                        ItemDO itemDO = itemDOList.get(i);
+                        ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(itemDO.getId());
+                        ItemModel itemModel = convertFromDataObject(itemDO, itemStockDO);
+                        itemModelList.add(itemModel);
+                }
+                return itemModelList;
         }
 
         @Override public ItemModel getItemById(Integer id) {
