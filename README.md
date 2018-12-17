@@ -18,12 +18,15 @@
         - allowCredentials 授信后，需前端也设置 xhfFields 授信才能实现跨域 session 共享。xhrFields: {withCredentials: true}, 
     - insertSelective 中设置 keyProperty="id" useGeneratedKeys="true" 使得插入完后的 DO 生成自增 id 。
     
- - 用户登陆接口 `com.loodeer.controller.UserController.login`
+- 规则校验优化 `com.loodeer.validator.ValidatorImpl`
+    - 使用 hibernate-validator 通过注解来完成模型参数校验
+    
+- 用户登陆接口 `com.loodeer.controller.UserController.login`
     - Mapper.xml 文件里 parameterType、jdbcType 分别指定入参和数据库字段类型。
     
- - 登陆前端页面 `html/login.html`
+- 登陆前端页面 `html/login.html`
  
- - 设计商品领域模型 `com.loodeer.service.model.ItemModel`
+- 设计商品领域模型 `com.loodeer.service.model.ItemModel`
     - 再设计表结构。 item 表、item_stock 表
     - mybatis generator 自动生成 DO DAO Mapper
     - Mapper.xml 里面 insert 语句增加 useGeneratedKeys="true" keyProperty="id"

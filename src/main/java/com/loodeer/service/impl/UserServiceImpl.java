@@ -8,6 +8,8 @@ import com.loodeer.error.BussinessException;
 import com.loodeer.error.EmBussinessError;
 import com.loodeer.service.UserService;
 import com.loodeer.service.model.UserModel;
+import com.loodeer.validator.ValidationResult;
+import com.loodeer.validator.ValidatorImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DuplicateKeyException;
@@ -25,6 +27,9 @@ public class UserServiceImpl implements UserService {
         @Resource
         private UserPasswordDOMapper userPasswordDOMapper;
 
+        @Resource
+        private ValidatorImpl validator;
+
         @Override
         public UserModel getUserById(Integer id) {
                 UserDO userDo = userDOMapper.selectByPrimaryKey(id);
@@ -38,11 +43,16 @@ public class UserServiceImpl implements UserService {
                 if (userModel == null) {
                         throw new BussinessException(EmBussinessError.PARAM_INVALID);
                 }
-                if (StringUtils.isEmpty(userModel.getName())
-                || userModel.getAge() == null
-                || userModel.getGender() == null
-                || StringUtils.isEmpty(userModel.getTelphone())) {
-                        throw new BussinessException(EmBussinessError.PARAM_INVALID);
+//                if (StringUtils.isEmpty(userModel.getName())
+//                || userModel.getAge() == null
+//                || userModel.getGender() == null
+//                || StringUtils.isEmpty(userModel.getTelphone())) {
+//                        throw new BussinessException(EmBussinessError.PARAM_INVALID);
+//                }
+
+                ValidationResult validationResult = validator.validate(userModel);
+                if (validationResult.isHasErrors()) {
+                        throw new BussinessException(EmBussinessError.PARAM_INVALID, validationResult.getErrMsg());
                 }
 
                 UserDO userDO = convertFromModel(userModel);
