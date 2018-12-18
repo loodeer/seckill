@@ -14,4 +14,6 @@ public interface ItemService {
     ItemModel getItemById(Integer id);
 
     Boolean decreaseStock(Integer itemId, Integer amount);
+
+    Boolean increaseSales(Integer itemId, Integer amount);
 }

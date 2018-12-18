@@ -59,7 +59,7 @@
                 xhrFields: {withCredentials: true},
                 success: function (data) {
                     if (data.status == "success") {
-                        alert("登陆成功");
+                        window.location.href = "itemlist.html";
                     } else {
                         alert("登陆失败,原因为" + data.data.errMsg);
                     }

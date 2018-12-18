@@ -95,4 +95,6 @@ public interface ItemDOMapper {
      * @mbg.generated Sun Dec 16 20:05:14 CST 2018
      */
     int updateByPrimaryKey(ItemDO record);
+
+    int increaseSales(@Param("itemId") Integer itemId, @Param("amount") Integer amount);
 }

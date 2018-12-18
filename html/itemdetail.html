@@ -43,40 +43,74 @@
         </div>
     </div>
     <div class="form-actions">
-        <button class="btn blue" id="create" type="submit">
+        <button class="btn blue" id="createOrder" type="submit">
             购买
         </button>
     </div>
 </div>
 </body>
 <script>
-    var g_item = [];
+    var g_item = {};
+
     function getQueryString(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
         var r = window.location.search.substr(1).match(reg);
-        if (r != null) return unescape(r[2]); return null;
+        if (r != null) return unescape(r[2]);
+        return null;
     }
+
     jQuery(document).ready(function () {
+        if (!getQueryString("id")) {
+            alert("商详链接有误");
+        }
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8090/item/get",
+            data: {
+                "id": getQueryString("id"),
+            },
+            xhrFields: {withCredentials: true},
+            success: function (data) {
+                if (data.status == "success") {
+                    g_item = data.data;
+                    reload_dom();
+                } else {
+                    alert("获取失败,原因为" + data.data.errMsg);
+                }
+            },
+            error: function (data) {
+                alert("获取失败，原因为" + data.responseText);
+            }
+
+        });
+
+        $("#createOrder").on("click", function () {
             $.ajax({
-                type: "GET",
-                url: "http://localhost:8090/item/get",
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded",
+                url: "http://localhost:8090/order/create",
                 data: {
-                    "id": getQueryString("id"),
+                    "itemId": g_item.id,
+                    "amount": 1
                 },
                 xhrFields: {withCredentials: true},
                 success: function (data) {
                     if (data.status == "success") {
-                        g_item = data.data;
-                        reload_dom();
+                        alert("下单成功");
+                        window.location.reload();
                     } else {
-                        alert("获取失败,原因为" + data.data.errMsg);
+                        alert("下单失败,原因为" + data.data.errMsg);
+                        if (data.data.errCode == 20003) {
+                            window.location.href = "login.html";
+                        }
                     }
                 },
                 error: function (data) {
-                    alert("获取失败，原因为" + data.responseText);
+                    alert("下单失败，原因为" + data.responseText);
                 }
 
             })
+        });
     });
 
     function reload_dom() {

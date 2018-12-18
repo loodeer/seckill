@@ -9,6 +9,7 @@ public enum EmBussinessError implements CommonError {
     // 2 开头为用户错误
     USER_NOT_EXIT(20001, "用户不存在"),
     USER_LOGIN_FAIL(20002, "登陆手机号或密码错误"),
+    USER_NOT_LOGIN(20003, "用户还未登陆"),
 
     // 3 开头为订单操作错误
     STOCK_NOT_ENOUGH(30001, "库存不足");

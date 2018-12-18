@@ -18,7 +18,7 @@
     </select>
     <update id="updateSequenceByName" parameterType="com.loodeer.dataobject.SequenceDO">
         update sequence_info
-        set current_value = #{current_value,jdbcType=INTEGER}
+        set current_value = #{currentValue,jdbcType=INTEGER}
     </update>
 
 </mapper>

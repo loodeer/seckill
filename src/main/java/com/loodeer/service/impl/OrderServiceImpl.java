@@ -15,6 +15,7 @@ import com.loodeer.service.model.OrderModel;
 import com.loodeer.service.model.UserModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ import java.util.Date;
  * @author loodeer
  * @date 2018-12-18 23:04
  */
+@Service
 public class OrderServiceImpl implements OrderService {
 
     @Resource
@@ -62,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
         if (!result) {
             throw new BussinessException(EmBussinessError.STOCK_NOT_ENOUGH);
         }
-
+        itemService.increaseSales(itemId, amount);
         // 3. 入库
         OrderModel orderModel = new OrderModel();
         orderModel.setId(generateOrderNo());
@@ -94,8 +96,8 @@ public class OrderServiceImpl implements OrderService {
         sequenceDO.setCurrentValue(sequence + sequenceDO.getStep());
         sequenceDOMapper.updateSequenceByName(sequenceDO);
 
-        if (sequence >= 100000) {
-            sequence = sequence - 100000;
+        if (sequence >= 1000000) {
+            sequence = sequence - 1000000;
         }
         for (int i = 0; i < 6 - String.valueOf(sequence).length(); i++) {
             stringBuilder.append("0");
@@ -105,7 +107,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 后两位为分库分表位
         stringBuilder.append("00");
-        return "";
+        return stringBuilder.toString();
     }
 
     private OrderDO convertFromOrderModel(OrderModel orderModel) {

@@ -60,3 +60,4 @@
     - 事务执行到了就提交 `Propagation.REQUIRES_NEW`
     - `LocalDateTime.now();` 获取时间
     - `now.format(DateTimeFormatter.BASIC_ISO_DATE);` 时间格式转化
+    - DOMapper 里面啥时候要写 @Param 啥时候不要写？
