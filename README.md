@@ -52,3 +52,6 @@
 
 - 商品详情页 `html/itemdetail.html`
     - 动态渲染 dom 数据
+
+- 交易领域模型设计 `com.loodeer.service.model.OrderModel`
+

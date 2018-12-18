@@ -43,8 +43,9 @@
         <!-- 生成对应表及类名 -->
         <!--<table tableName="user_info" domainObjectName="UserDO"></table>-->
         <!--<table tableName="user_password" domainObjectName="UserPasswordDO"></table>-->
-        <table tableName="item" domainObjectName="ItemDO"></table>
-        <table tableName="item_stock" domainObjectName="ItemStockDO"></table>
+        <!--<table tableName="item" domainObjectName="ItemDO"></table>-->
+        <!--<table tableName="item_stock" domainObjectName="ItemStockDO"></table>-->
+        <table tableName="order_info" domainObjectName="OrderDO"></table>
 
     </context>
 </generatorConfiguration>
