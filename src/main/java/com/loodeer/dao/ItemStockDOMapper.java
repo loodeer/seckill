@@ -95,4 +95,6 @@ public interface ItemStockDOMapper {
      * @mbg.generated Sun Dec 16 20:05:14 CST 2018
      */
     int updateByPrimaryKey(ItemStockDO record);
+
+    int decreaseStock(Integer itemId, Integer amount);
 }

@@ -24,82 +24,92 @@ import java.util.ListIterator;
 @Service
 public class ItemServiceImpl implements ItemService {
 
-        @Resource
-        private ValidatorImpl validator;
+    @Resource
+    private ValidatorImpl validator;
 
-        @Resource
-        private ItemDOMapper itemDOMapper;
+    @Resource
+    private ItemDOMapper itemDOMapper;
 
-        @Resource
-        private ItemStockDOMapper itemStockDOMapper;
+    @Resource
+    private ItemStockDOMapper itemStockDOMapper;
 
-        @Override
-        @Transactional
-        public ItemModel createItem(ItemModel itemModel) throws BussinessException {
-                // 1. 入参校验
-                ValidationResult validationResult = validator.validate(itemModel);
-                if (validationResult.isHasErrors()) {
-                        throw new BussinessException(EmBussinessError.PARAM_INVALID, validationResult.getErrMsg());
-                }
-                // 2. 转化 itemModel -> dataObject
-                ItemDO itemDO = convertItemDOFromItemModel(itemModel);
-                // 3. 写入数据库
-                itemDOMapper.insertSelective(itemDO);
-                itemModel.setId(itemDO.getId());
-                ItemStockDO itemStockDO = convertItemStockDOFromItemModel(itemModel);
-                itemStockDOMapper.insertSelective(itemStockDO);
-                // 4. 返回创建完的对象
-                return getItemById(itemModel.getId());
+    @Override
+    @Transactional
+    public ItemModel createItem(ItemModel itemModel) throws BussinessException {
+        // 1. 入参校验
+        ValidationResult validationResult = validator.validate(itemModel);
+        if (validationResult.isHasErrors()) {
+            throw new BussinessException(EmBussinessError.PARAM_INVALID, validationResult.getErrMsg());
         }
+        // 2. 转化 itemModel -> dataObject
+        ItemDO itemDO = convertItemDOFromItemModel(itemModel);
+        // 3. 写入数据库
+        itemDOMapper.insertSelective(itemDO);
+        itemModel.setId(itemDO.getId());
+        ItemStockDO itemStockDO = convertItemStockDOFromItemModel(itemModel);
+        itemStockDOMapper.insertSelective(itemStockDO);
+        // 4. 返回创建完的对象
+        return getItemById(itemModel.getId());
+    }
 
-        @Override public List<ItemModel> listItem() {
-                List<ItemDO> itemDOList = itemDOMapper.itemList();
-                List<ItemModel> itemModelList = new ArrayList<>();
-                for (int i = 0; i < itemDOList.size(); i ++) {
-                        ItemDO itemDO = itemDOList.get(i);
-                        ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(itemDO.getId());
-                        ItemModel itemModel = convertFromDataObject(itemDO, itemStockDO);
-                        itemModelList.add(itemModel);
-                }
-                return itemModelList;
+    @Override public List<ItemModel> listItem() {
+        List<ItemDO> itemDOList = itemDOMapper.itemList();
+        List<ItemModel> itemModelList = new ArrayList<>();
+        for (int i = 0; i < itemDOList.size(); i++) {
+            ItemDO itemDO = itemDOList.get(i);
+            ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(itemDO.getId());
+            ItemModel itemModel = convertFromDataObject(itemDO, itemStockDO);
+            itemModelList.add(itemModel);
         }
+        return itemModelList;
+    }
 
-        @Override public ItemModel getItemById(Integer id) {
-                ItemDO itemDO = itemDOMapper.selectByPrimaryKey(id);
-                if (itemDO == null) {
-                        return null;
-                }
-                ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(id);
-
-                // 将 dataObject 转为 model
-                ItemModel itemModel = convertFromDataObject(itemDO, itemStockDO);
-                return itemModel;
+    @Override public ItemModel getItemById(Integer id) {
+        ItemDO itemDO = itemDOMapper.selectByPrimaryKey(id);
+        if (itemDO == null) {
+            return null;
         }
+        ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(id);
 
-        private ItemModel convertFromDataObject(ItemDO itemDO, ItemStockDO itemStockDO) {
-                ItemModel itemModel = new ItemModel();
-                BeanUtils.copyProperties(itemDO, itemModel);
-                itemModel.setStock(itemStockDO.getStock());
-                return itemModel;
+        // 将 dataObject 转为 model
+        ItemModel itemModel = convertFromDataObject(itemDO, itemStockDO);
+        return itemModel;
+    }
+
+    @Override public Boolean decreaseStock(Integer itemId, Integer amount) {
+
+        int affectRow = itemStockDOMapper.decreaseStock(itemId, amount);
+        if (affectRow > 0) {
+            return true;
+        } else {
+            return false;
         }
+    }
 
-        private ItemDO convertItemDOFromItemModel(ItemModel itemModel) {
-                if (itemModel == null) {
-                        return null;
-                }
-                ItemDO itemDO = new ItemDO();
-                BeanUtils.copyProperties(itemModel, itemDO);
+    private ItemModel convertFromDataObject(ItemDO itemDO, ItemStockDO itemStockDO) {
+        ItemModel itemModel = new ItemModel();
+        BeanUtils.copyProperties(itemDO, itemModel);
+        itemModel.setStock(itemStockDO.getStock());
+        return itemModel;
+    }
 
-                return itemDO;
+    private ItemDO convertItemDOFromItemModel(ItemModel itemModel) {
+        if (itemModel == null) {
+            return null;
         }
+        ItemDO itemDO = new ItemDO();
+        BeanUtils.copyProperties(itemModel, itemDO);
 
-        private ItemStockDO convertItemStockDOFromItemModel(ItemModel itemModel){
-                if (itemModel == null) {
-                        return  null;
-                }
-                ItemStockDO itemStockDO = new ItemStockDO();
-                itemStockDO.setItemId(itemModel.getId());
-                itemStockDO.setStock(itemModel.getStock());
-                return itemStockDO;
+        return itemDO;
+    }
+
+    private ItemStockDO convertItemStockDOFromItemModel(ItemModel itemModel) {
+        if (itemModel == null) {
+            return null;
         }
+        ItemStockDO itemStockDO = new ItemStockDO();
+        itemStockDO.setItemId(itemModel.getId());
+        itemStockDO.setStock(itemModel.getStock());
+        return itemStockDO;
+    }
 }

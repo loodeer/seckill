@@ -55,3 +55,8 @@
 
 - 交易领域模型设计 `com.loodeer.service.model.OrderModel`
 
+- 下单接口 `com.loodeer.service.impl.OrderServiceImpl.createOrder`
+    - mysql 通过自设计 `sequence` 表，来实现递增值
+    - 事务执行到了就提交 `Propagation.REQUIRES_NEW`
+    - `LocalDateTime.now();` 获取时间
+    - `now.format(DateTimeFormatter.BASIC_ISO_DATE);` 时间格式转化

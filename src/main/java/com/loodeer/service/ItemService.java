@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface ItemService {
 
-        ItemModel createItem(ItemModel itemModel) throws BussinessException;
+    ItemModel createItem(ItemModel itemModel) throws BussinessException;
 
-        List<ItemModel> listItem();
+    List<ItemModel> listItem();
 
-        ItemModel getItemById(Integer id);
+    ItemModel getItemById(Integer id);
+
+    Boolean decreaseStock(Integer itemId, Integer amount);
 }
