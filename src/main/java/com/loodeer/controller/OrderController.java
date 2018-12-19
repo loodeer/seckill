@@ -5,6 +5,7 @@ import com.loodeer.error.BussinessException;
 import com.loodeer.error.EmBussinessError;
 import com.loodeer.response.CommonResult;
 import com.loodeer.service.OrderService;
+import com.loodeer.service.impl.OrderServiceImpl;
 import com.loodeer.service.model.OrderModel;
 import com.loodeer.service.model.UserModel;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 public class OrderController extends BaseController {
 
     @Resource
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
 
     @Resource
     private HttpServletRequest httpServletRequest;
@@ -46,16 +47,9 @@ public class OrderController extends BaseController {
         // 获取登陆信息
         UserModel userModel = (UserModel) httpServletRequest.getSession().getAttribute("LOGIN_USER");
         OrderModel orderModel = orderService.createOrder(userModel.getId(), itemId, amount);
-        OrderVO orderVO = convertFromPromoModel(orderModel);
+        OrderVO orderVO = orderService.convertOrderVOFromPromoModel(orderModel);
         return CommonResult.create(orderVO);
     }
 
-    private OrderVO convertFromPromoModel(OrderModel orderModel) {
-        if (orderModel == null) {
-            return null;
-        }
-        OrderVO orderVO = new OrderVO();
-        BeanUtils.copyProperties(orderModel, orderVO);
-        return orderVO;
-    }
+
 }

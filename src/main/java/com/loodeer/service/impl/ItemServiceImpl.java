@@ -1,5 +1,6 @@
 package com.loodeer.service.impl;
 
+import com.loodeer.controller.viewObject.ItemVO;
 import com.loodeer.dao.ItemDOMapper;
 import com.loodeer.dao.ItemStockDOMapper;
 import com.loodeer.dataobject.ItemDO;
@@ -7,7 +8,9 @@ import com.loodeer.dataobject.ItemStockDO;
 import com.loodeer.error.BussinessException;
 import com.loodeer.error.EmBussinessError;
 import com.loodeer.service.ItemService;
+import com.loodeer.service.PromoService;
 import com.loodeer.service.model.ItemModel;
+import com.loodeer.service.model.PromoModel;
 import com.loodeer.validator.ValidationResult;
 import com.loodeer.validator.ValidatorImpl;
 import org.springframework.beans.BeanUtils;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -32,6 +36,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Resource
     private ItemStockDOMapper itemStockDOMapper;
+
+    @Resource
+    private PromoServiceImpl promoService;
 
     @Override
     @Transactional
@@ -73,6 +80,13 @@ public class ItemServiceImpl implements ItemService {
 
         // 将 dataObject 转为 model
         ItemModel itemModel = convertFromDataObject(itemDO, itemStockDO);
+
+        // 查询秒杀信息
+        PromoModel promoModel = promoService.getPromoByItemId(itemModel.getId());
+        if (promoModel != null && promoModel.getStatus() != 3) {
+            itemModel.setPromoModel(promoModel);
+        }
+
         return itemModel;
     }
 
@@ -120,5 +134,18 @@ public class ItemServiceImpl implements ItemService {
         itemStockDO.setItemId(itemModel.getId());
         itemStockDO.setStock(itemModel.getStock());
         return itemStockDO;
+    }
+
+    public ItemVO convertVOFromModel(ItemModel itemModel) {
+        if (itemModel == null) {
+            return null;
+        }
+        ItemVO itemVO = new ItemVO();
+        BeanUtils.copyProperties(itemModel, itemVO);
+        itemVO.setPrice(BigDecimal.valueOf(itemModel.getPrice()).divide(new BigDecimal(100)));
+        if (itemModel.getPromoModel() != null) {
+            itemVO.setPromoVO(promoService.convertPromoVOFromPromoModel(itemModel.getPromoModel()));
+        }
+        return itemVO;
     }
 }

@@ -1,5 +1,6 @@
 package com.loodeer.service.impl;
 
+import com.loodeer.controller.viewObject.OrderVO;
 import com.loodeer.dao.ItemStockDOMapper;
 import com.loodeer.dao.OrderDOMapper;
 import com.loodeer.dao.SequenceDOMapper;
@@ -117,5 +118,14 @@ public class OrderServiceImpl implements OrderService {
         OrderDO orderDO = new OrderDO();
         BeanUtils.copyProperties(orderModel, orderDO);
         return orderDO;
+    }
+
+    public OrderVO convertOrderVOFromPromoModel(OrderModel orderModel) {
+        if (orderModel == null) {
+            return null;
+        }
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(orderModel, orderVO);
+        return orderVO;
     }
 }

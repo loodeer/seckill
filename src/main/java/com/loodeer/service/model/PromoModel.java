@@ -30,6 +30,9 @@ public class PromoModel {
     @Min(value = 100, message = "秒杀价必须大于 1 元")
     private Integer promoItemPrice;
 
+    // 秒杀活动状态，1未开始，2进行中，3已结束。
+    private Integer status;
+
     public Integer getId() {
         return id;
     }
@@ -76,5 +79,13 @@ public class PromoModel {
 
     public void setPromoItemPrice(Integer promoItemPrice) {
         this.promoItemPrice = promoItemPrice;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

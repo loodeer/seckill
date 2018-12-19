@@ -1,5 +1,6 @@
 package com.loodeer.controller.viewObject;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -17,7 +18,9 @@ public class PromoVO {
 
     private Integer itemId;
 
-    private Integer promoItemPrice;
+    private BigDecimal promoItemPrice;
+
+    private Integer status;
 
     public Integer getId() {
         return id;
@@ -59,11 +62,19 @@ public class PromoVO {
         this.itemId = itemId;
     }
 
-    public Integer getPromoItemPrice() {
+    public BigDecimal getPromoItemPrice() {
         return promoItemPrice;
     }
 
-    public void setPromoItemPrice(Integer promoItemPrice) {
+    public void setPromoItemPrice(BigDecimal promoItemPrice) {
         this.promoItemPrice = promoItemPrice;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

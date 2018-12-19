@@ -9,4 +9,6 @@ import com.loodeer.service.model.PromoModel;
  */
 public interface PromoService {
     PromoModel createPromo(PromoModel promoModel) throws BussinessException;
+
+    PromoModel getPromoByItemId(Integer itemId);
 }

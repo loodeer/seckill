@@ -6,6 +6,7 @@ import com.loodeer.error.BussinessException;
 import com.loodeer.error.EmBussinessError;
 import com.loodeer.response.CommonResult;
 import com.loodeer.service.UserService;
+import com.loodeer.service.impl.UserServiceImpl;
 import com.loodeer.service.model.UserModel;
 import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.BeanUtils;
@@ -33,7 +34,7 @@ import java.util.Random;
 public class UserController extends BaseController{
 
         @Resource
-        private UserService userService;
+        private UserServiceImpl userService;
 
         @Resource
         private HttpServletRequest httpServletRequest;
@@ -42,7 +43,7 @@ public class UserController extends BaseController{
         @ResponseBody
         public CommonResult getUser(@RequestParam(name="id") Integer id) throws BussinessException {
                UserModel userModel = userService.getUserById(id);
-               UserVO userVO = convertFromModel(userModel);
+               UserVO userVO = userService.convertUserVOFromModel(userModel);
                if (userVO == null) {
                        throw new BussinessException(EmBussinessError.USER_NOT_EXIT);
                }
@@ -127,13 +128,6 @@ public class UserController extends BaseController{
                 return CommonResult.create(null);
         }
 
-        private UserVO convertFromModel(UserModel userModel) {
-                if (userModel == null) {
-                        return null;
-                }
-                UserVO userVO = new UserVO();
-                BeanUtils.copyProperties(userModel, userVO);
-                return userVO;
-        }
+
 
 }
