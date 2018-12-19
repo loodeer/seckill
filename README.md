@@ -1,5 +1,6 @@
 
-
+- 插入数据库中文乱码解决
+    - `spring.datasource.url = jdbc:mysql://127.0.0.1:3306/seckill?characterEncoding=utf8` 增加 `?characterEncoding=utf8` 段
 
 - 短信验证码获取接口 `com.loodeer.controller.UserController.getOtp`
 
@@ -66,3 +67,4 @@
     - `joda-time` 
     - `insertSelective(promoDO)` 后 promoDO 里即有 `id`,前提是 `mapper.xml` 里插入语句设置了 `useGeneratedKeys="true" keyProperty="id"`
     - `joda-time` 格式的数据可以直接 `.toDate()` 转成 `Date` 格式
+   
