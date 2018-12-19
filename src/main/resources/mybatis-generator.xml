@@ -46,7 +46,8 @@
         <!--<table tableName="item" domainObjectName="ItemDO"></table>-->
         <!--<table tableName="item_stock" domainObjectName="ItemStockDO"></table>-->
         <!--<table tableName="order_info" domainObjectName="OrderDO"></table>-->
-        <table tableName="sequence_info" domainObjectName="SequenceDO"></table>
+        <!--<table tableName="sequence_info" domainObjectName="SequenceDO"></table>-->
+        <table tableName="promo_info" domainObjectName="PromoDO"></table>
 
     </context>
 </generatorConfiguration>

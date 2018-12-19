@@ -1,11 +1,13 @@
 package com.loodeer.controller;
 
+import com.loodeer.controller.viewObject.OrderVO;
 import com.loodeer.error.BussinessException;
 import com.loodeer.error.EmBussinessError;
 import com.loodeer.response.CommonResult;
 import com.loodeer.service.OrderService;
 import com.loodeer.service.model.OrderModel;
 import com.loodeer.service.model.UserModel;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +46,16 @@ public class OrderController extends BaseController {
         // 获取登陆信息
         UserModel userModel = (UserModel) httpServletRequest.getSession().getAttribute("LOGIN_USER");
         OrderModel orderModel = orderService.createOrder(userModel.getId(), itemId, amount);
+        OrderVO orderVO = convertFromPromoModel(orderModel);
+        return CommonResult.create(orderVO);
+    }
 
-        return CommonResult.create(orderModel);
+    private OrderVO convertFromPromoModel(OrderModel orderModel) {
+        if (orderModel == null) {
+            return null;
+        }
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(orderModel, orderVO);
+        return orderVO;
     }
 }

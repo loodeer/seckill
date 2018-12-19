@@ -61,3 +61,8 @@
     - `LocalDateTime.now();` 获取时间
     - `now.format(DateTimeFormatter.BASIC_ISO_DATE);` 时间格式转化
     - DOMapper 里面啥时候要写 @Param 啥时候不要写？
+    
+- 秒杀模型 `com.loodeer.service.model.PromoModel`
+    - `joda-time` 
+    - `insertSelective(promoDO)` 后 promoDO 里即有 `id`,前提是 `mapper.xml` 里插入语句设置了 `useGeneratedKeys="true" keyProperty="id"`
+    - `joda-time` 格式的数据可以直接 `.toDate()` 转成 `Date` 格式
