@@ -1,4 +1,4 @@
-    <html>
+<html>
 <head>
     <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" href="bootstrap.min.css">
@@ -11,7 +11,8 @@
     <h3 class="form-title">商品详情</h3>
     <div id="promoStartContainer" style="display: none" class="form-group">
         <div>
-            <label style="color:red" class="control-label" type="text" placeholder="开始时间" name="promoStart" id="promoStart"></label>
+            <label style="color:red" class="control-label" type="text" placeholder="开始时间" name="promoStart"
+                   id="promoStart"></label>
         </div>
     </div>
     <div class="form-group">
@@ -24,7 +25,7 @@
             <label class="control-label" type="text" placeholder="商品描述" name="description" id="description"></label>
         </div>
     </div>
-    <div class="form-group">
+    <div id="priceContainer" class="form-group">
         <label class="control-label">价格</label>
         <div>
             <label class="control-label" type="text" placeholder="价格" name="price" id="price"></label>
@@ -34,7 +35,8 @@
     <div id="promoPriceContainer" style="display: none" class="form-group">
         <label style="color:red" class="control-label">秒杀价格</label>
         <div>
-            <label style="color:red" class="control-label" type="text" placeholder="价格" name="promoPrice" id="promoPrice"></label>
+            <label style="color:red" class="control-label" type="text" placeholder="价格" name="promoPrice"
+                   id="promoPrice"></label>
             <label class="control-label">元</label>
         </div>
     </div>
@@ -87,6 +89,7 @@
                 if (data.status == "success") {
                     g_item = data.data;
                     reload_dom();
+                    setInterval(reload_dom, 1000);
                 } else {
                     alert("获取失败,原因为" + data.data.errMsg);
                 }
@@ -104,7 +107,7 @@
                 url: "http://localhost:8090/order/create",
                 data: {
                     "itemId": g_item.id,
-                    "amount": 1
+                    "amount": 1,
                 },
                 xhrFields: {withCredentials: true},
                 success: function (data) {
@@ -135,15 +138,26 @@
         $("#imgUrl").attr("src", g_item.imgUrl);
         if (g_item.promoVO) {
             if (g_item.promoVO.status == 1) {
+                var startTime = g_item.promoVO.startDate.replace(new RegExp("-", "gm"), "/");
+                startTime = (new Date(startTime)).getTime();
+                var nowTime = Date.parse(new Date());
+                var delta = (startTime - nowTime) / 1000;
+                if (delta <= 0) {
+                    // 页面一次渲染完成后，定时器过程中，不会给后端发请求
+                    g_item.promoVO.status = 2;
+                }
                 $("#promoPriceContainer").show();
                 $("#promoStartContainer").show();
-                $("#promoStart").text("秒杀活动将于" + g_item.promoVO.startDate + "开始售卖");
-                $("#promoPrice").text(g_item.promoItemPrice);
+                $("#promoStart").text("秒杀活动将于 " + g_item.promoVO.startDate + " 开始售卖 倒计时:" + delta + "秒");
+                $("#promoPrice").text(g_item.promoVO.promoItemPrice);
+                $("#createOrder").attr("disabled", true);
             } else if (g_item.promoVO.status == 2) {
                 $("#promoPriceContainer").show();
                 $("#promoStartContainer").show();
+                $("#priceContainer").hide();
                 $("#promoStart").text("秒杀活动正在进行中");
                 $("#promoPrice").text(g_item.promoVO.promoItemPrice);
+                $("#createOrder").attr("disabled", false);
             }
         }
     }
