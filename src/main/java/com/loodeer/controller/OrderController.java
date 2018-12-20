@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller("order")
 @RequestMapping("/order")
-@CrossOrigin(origins = {"*"}, allowCredentials = "true")
+@CrossOrigin(origins = { "*" }, allowCredentials = "true")
 public class OrderController extends BaseController {
 
     @Resource
@@ -34,10 +34,11 @@ public class OrderController extends BaseController {
     @Resource
     private HttpServletRequest httpServletRequest;
 
-    @RequestMapping(value = "create", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
+    @RequestMapping(value = "create", method = { RequestMethod.POST }, consumes = { CONTENT_TYPE_FORMED })
     @ResponseBody
     public CommonResult create(@RequestParam("itemId") Integer itemId,
-            @RequestParam("amount") Integer amount) throws BussinessException {
+            @RequestParam("amount") Integer amount, @RequestParam("promoId") Integer promoId)
+            throws BussinessException {
 
         Boolean isLogin = (Boolean) httpServletRequest.getSession().getAttribute("IS_LOGIN");
         if (isLogin == null || !isLogin) {
@@ -46,10 +47,9 @@ public class OrderController extends BaseController {
 
         // 获取登陆信息
         UserModel userModel = (UserModel) httpServletRequest.getSession().getAttribute("LOGIN_USER");
-        OrderModel orderModel = orderService.createOrder(userModel.getId(), itemId, amount);
+        OrderModel orderModel = orderService.createOrder(userModel.getId(), itemId, amount, promoId);
         OrderVO orderVO = orderService.convertOrderVOFromPromoModel(orderModel);
         return CommonResult.create(orderVO);
     }
-
 
 }

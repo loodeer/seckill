@@ -11,6 +11,7 @@ public class OrderVO {
     private Integer itemPrice;
     private Integer amount;
     private Integer orderPrice;
+    private Integer promoId;
 
     public String getId() {
         return id;
@@ -58,5 +59,13 @@ public class OrderVO {
 
     public void setOrderPrice(Integer orderPrice) {
         this.orderPrice = orderPrice;
+    }
+
+    public Integer getPromoId() {
+        return promoId;
+    }
+
+    public void setPromoId(Integer promoId) {
+        this.promoId = promoId;
     }
 }

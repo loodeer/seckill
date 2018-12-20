@@ -11,4 +11,6 @@ public interface PromoService {
     PromoModel createPromo(PromoModel promoModel) throws BussinessException;
 
     PromoModel getPromoByItemId(Integer itemId);
+
+    PromoModel getPromoById(Integer id);
 }

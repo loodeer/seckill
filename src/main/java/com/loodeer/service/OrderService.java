@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public interface OrderService {
 
-    OrderModel createOrder(Integer userId, Integer itemId, Integer amount) throws BussinessException;
+    OrderModel createOrder(Integer userId, Integer itemId, Integer amount, Integer promoId) throws BussinessException;
 }

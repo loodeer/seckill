@@ -9,6 +9,9 @@ public class OrderModel {
     private Integer amount;
     private Integer orderPrice;
 
+    // 若有，则说明是已秒杀价下单
+    private Integer promoId;
+
     public String getId() {
         return id;
     }
@@ -55,5 +58,13 @@ public class OrderModel {
 
     public void setOrderPrice(Integer orderPrice) {
         this.orderPrice = orderPrice;
+    }
+
+    public Integer getPromoId() {
+        return promoId;
+    }
+
+    public void setPromoId(Integer promoId) {
+        this.promoId = promoId;
     }
 }

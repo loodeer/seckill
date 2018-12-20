@@ -65,6 +65,26 @@ public class PromoServiceImpl implements PromoService {
         return promoModel;
     }
 
+    @Override
+    public PromoModel getPromoById(Integer id) {
+        PromoDO promoDO = promoDOMapper.selectByPrimaryKey(id);
+        PromoModel promoModel = convertFromPromoDO(promoDO);
+        if (promoModel == null){
+            return null;
+        }
+        if (promoModel.getStartDate().isAfterNow()) {
+            // 未开始
+            promoModel.setStatus(1);
+        } else if (promoModel.getEndDate().isBeforeNow()) {
+            // 已结束
+            promoModel.setStatus(3);
+        } else {
+            // 进行中
+            promoModel.setStatus(2);
+        }
+        return promoModel;
+    }
+
     private PromoModel convertFromPromoDO(PromoDO promoDO) {
         if (promoDO == null) {
             return null;

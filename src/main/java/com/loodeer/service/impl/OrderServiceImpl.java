@@ -10,9 +10,11 @@ import com.loodeer.error.BussinessException;
 import com.loodeer.error.EmBussinessError;
 import com.loodeer.service.ItemService;
 import com.loodeer.service.OrderService;
+import com.loodeer.service.PromoService;
 import com.loodeer.service.UserService;
 import com.loodeer.service.model.ItemModel;
 import com.loodeer.service.model.OrderModel;
+import com.loodeer.service.model.PromoModel;
 import com.loodeer.service.model.UserModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.Order;
@@ -44,9 +46,13 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     private SequenceDOMapper sequenceDOMapper;
 
+    @Resource
+    private PromoService promoService;
+
     @Override
     @Transactional
-    public OrderModel createOrder(Integer userId, Integer itemId, Integer amount) throws BussinessException {
+    public OrderModel createOrder(Integer userId, Integer itemId, Integer amount, Integer promoId)
+            throws BussinessException {
         // 1. 参数校验
         ItemModel itemModel = itemService.getItemById(itemId);
         if (itemModel == null) {
@@ -60,6 +66,19 @@ public class OrderServiceImpl implements OrderService {
             throw new BussinessException(EmBussinessError.PARAM_INVALID, "购买数量不正确");
         }
 
+        Integer price = itemModel.getPrice();
+        if (promoId != null && promoId != 0) {
+            PromoModel promoModel = promoService.getPromoById(promoId);
+            if (promoModel.getItemId() != itemId) {
+                throw new BussinessException(EmBussinessError.PARAM_INVALID, "活动信息不正确");
+            }
+            if (promoModel.getStatus() != 2) {
+                throw new BussinessException(EmBussinessError.PARAM_INVALID, "秒杀活动未在进行中");
+            } else {
+                price = promoModel.getPromoItemPrice();
+            }
+        }
+
         // 2. 落单减库存
         Boolean result = itemService.decreaseStock(itemId, amount);
         if (!result) {
@@ -71,9 +90,12 @@ public class OrderServiceImpl implements OrderService {
         orderModel.setId(generateOrderNo());
         orderModel.setUserId(userId);
         orderModel.setItemId(itemId);
-        orderModel.setItemPrice(itemModel.getPrice());
+        orderModel.setItemPrice(price);
         orderModel.setAmount(amount);
-        orderModel.setOrderPrice(amount * itemModel.getPrice());
+        orderModel.setOrderPrice(amount * price);
+        if (promoId != null) {
+            orderModel.setPromoId(promoId);
+        }
 
         OrderDO orderDO = convertFromOrderModel(orderModel);
         orderDOMapper.insertSelective(orderDO);

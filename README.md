@@ -72,3 +72,6 @@
 - 秒杀活动获取服务
     - `new DateTime(promoDO.getStartTime())` `Date` 格式转为 `joda-time` 的 `DateTime` 格式 
     - `dateTime.toString(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"))` 转为 String 类型指定格式的输出
+    
+- 秒杀进行中已秒杀价购买
+    - REST 接口入参格式不匹配，接口就报错了

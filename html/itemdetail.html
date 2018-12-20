@@ -108,6 +108,7 @@
                 data: {
                     "itemId": g_item.id,
                     "amount": 1,
+                    "promoId": g_item.promoVO ? g_item.promoVO.id : null
                 },
                 xhrFields: {withCredentials: true},
                 success: function (data) {
