@@ -71,3 +71,4 @@
     
 - 秒杀活动获取服务
     - `new DateTime(promoDO.getStartTime())` `Date` 格式转为 `joda-time` 的 `DateTime` 格式 
+    - `dateTime.toString(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"))` 转为 String 类型指定格式的输出

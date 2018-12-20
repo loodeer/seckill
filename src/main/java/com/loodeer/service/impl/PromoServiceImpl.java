@@ -10,6 +10,8 @@ import com.loodeer.service.model.PromoModel;
 import com.loodeer.validator.ValidationResult;
 import com.loodeer.validator.ValidatorImpl;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -90,8 +92,8 @@ public class PromoServiceImpl implements PromoService {
         }
         PromoVO promoVO = new PromoVO();
         BeanUtils.copyProperties(promoModel, promoVO);
-        promoVO.setStartDate(promoModel.getStartDate().toDate());
-        promoVO.setEndDate(promoModel.getEndDate().toDate());
+        promoVO.setStartDate(promoModel.getStartDate().toString(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")));
+        promoVO.setEndDate(promoModel.getEndDate().toString(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")));
         promoVO.setPromoItemPrice(BigDecimal.valueOf(promoModel.getPromoItemPrice()).divide(new BigDecimal(100)));
         return promoVO;
     }
