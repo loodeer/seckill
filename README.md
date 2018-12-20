@@ -1,5 +1,27 @@
 
 
+### 使用到的外部依赖
+
+- org.springframework.boot:spring-boot-starter-web
+- mysql:mysql-connector-java
+- com.alibaba:druid
+- org.mybatis.spring.boot:mybatis-spring-boot-starter
+- org.apache.commons:commons-lang3
+- org.hibernate:hibernate-validator
+- joda-time:joda-time
+- junit:junit
+- org.springframework:spring-test
+- org.mybatis.generator：mybatis-generator-maven-plugin （插件）
+
+### 过程分解
+
+- IDEA 生成 maven 项目
+
+- 集成 spring-boot
+    - https://spring.io/guides/gs/rest-service/
+
+- mybatis-generator-maven-plugin 插件使用
+
 - 短信验证码获取接口 `com.loodeer.controller.UserController.getOtp`
 
 - 前端 ajax 调用接口获取验证码 `html/getotp.html`
