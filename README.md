@@ -1,4 +1,92 @@
 
+### 项目仅供学习交流使用。
+
+本项目主要目的是为了进行 java 实践，90% + 的代码来自 `龙虾三少` 大佬在慕课网的视频课程，在此特再次感谢大佬。
+
+不过也有一些不一样的地方，是按我自己的思考来的，比如价格我是以分为单位存在数据库里的,itemVO 下返回 promoVO 字段等等，慕课网的同学如果参考该项目请特别注意。
+
+课程地址：[SpringBoot构建电商基础秒杀项目](https://www.imooc.com/learn/1079) ，强烈推荐！！
+
+[html 目录](https://github.com/loodeer/seckill/tree/master/html) 下为前端代码，直接通过浏览器打开本地文件访问。剩余的为服务端代码。
+
+### mysql DDL 
+
+用户信息表
+```
+CREATE TABLE `user_info` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'uid',
+  `name` varchar(64) DEFAULT NULL COMMENT '用户名',
+  `gender` int(11) DEFAULT NULL COMMENT '性别',
+  `age` int(11) DEFAULT NULL COMMENT '年龄',
+  `telphone` varchar(11) DEFAULT NULL COMMENT '手机号',
+  `register_mode` int(11) DEFAULT NULL COMMENT '注册来源',
+  `third_party_id` varchar(11) DEFAULT NULL COMMENT '关联第三方账号',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tel_unique` (`telphone`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='用户信息表';
+```
+用户密码表
+```
+CREATE TABLE `user_password` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `encrpt_password` varchar(64) DEFAULT NULL COMMENT '加密密码',
+  `user_id` int(11) DEFAULT NULL COMMENT 'user_info.id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='用户密码表';
+```
+商品信息表
+```
+CREATE TABLE `item` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(64) NOT NULL DEFAULT '' COMMENT '商品标题',
+  `price` int(11) NOT NULL COMMENT '价格',
+  `description` varchar(512) NOT NULL DEFAULT '' COMMENT '描述',
+  `sales` int(11) NOT NULL DEFAULT '0' COMMENT '销量',
+  `img_url` varchar(128) NOT NULL DEFAULT '' COMMENT '商品图片地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='商品信息表';
+```
+商品库存表
+```
+CREATE TABLE `item_stock` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `stock` int(11) NOT NULL COMMENT '库存',
+  `item_id` int(11) NOT NULL COMMENT 'item.id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='商品库存表';
+```
+订单表
+```
+CREATE TABLE `order_info` (
+  `id` varchar(16) NOT NULL DEFAULT '',
+  `user_id` int(11) NOT NULL COMMENT 'user_info.id',
+  `item_id` int(11) NOT NULL COMMENT 'item.id',
+  `item_price` int(11) NOT NULL COMMENT '商品价格',
+  `amount` int(11) NOT NULL COMMENT '购买件数',
+  `order_price` int(11) NOT NULL COMMENT '订单价格',
+  `promo_id` int(11) DEFAULT '0' COMMENT '秒杀活动id'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+```
+计数器表
+```
+CREATE TABLE `sequence_info` (
+  `name` varchar(32) NOT NULL DEFAULT '',
+  `current_value` int(11) NOT NULL DEFAULT '0' COMMENT '当前值',
+  `step` int(11) NOT NULL DEFAULT '1' COMMENT '步长'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计数器表';
+```
+秒杀信息表
+```
+CREATE TABLE `promo_info` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '秒杀活动id',
+  `promo_name` varchar(32) NOT NULL DEFAULT '' COMMENT '秒杀活动名',
+  `start_time` datetime NOT NULL COMMENT '秒杀开始时间',
+  `end_time` datetime NOT NULL COMMENT '结束时间',
+  `promo_item_price` int(11) NOT NULL COMMENT '秒杀价',
+  `item_id` int(11) NOT NULL COMMENT 'item.id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='秒杀信息表';
+```
 
 ### 使用到的外部依赖
 
@@ -16,6 +104,7 @@
 ### 过程分解
 
 - IDEA 生成 maven 项目
+
 
 - 集成 spring-boot
     - https://spring.io/guides/gs/rest-service/
