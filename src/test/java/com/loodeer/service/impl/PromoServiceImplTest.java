@@ -9,7 +9,7 @@ import javax.annotation.Resource;
  * @author loodeer
  * @date 2018-12-20 01:14
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 public class PromoServiceImplTest {
 
     @Resource
