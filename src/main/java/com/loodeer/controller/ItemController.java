@@ -7,6 +7,8 @@ import com.loodeer.service.ItemService;
 import com.loodeer.service.impl.ItemServiceImpl;
 import com.loodeer.service.impl.PromoServiceImpl;
 import com.loodeer.service.model.ItemModel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,6 +29,8 @@ import java.util.ListIterator;
 @RequestMapping("/item")
 @CrossOrigin(origins = { "*" }, allowCredentials = "true")
 public class ItemController extends BaseController {
+
+    Logger logger = LogManager.getLogger();
 
     @Resource
     private ItemServiceImpl itemService;
@@ -62,6 +66,9 @@ public class ItemController extends BaseController {
     @RequestMapping(value = "/list")
     @ResponseBody
     public CommonResult itemList() {
+        System.out.println("println: 访问了一次商品列表页");
+        logger.info("log4j: 访问了一次商品列表页");
+        logger.debug("debug: 访问了一次商品列表页");
         List<ItemModel> itemModelList = itemService.listItem();
 
         List<ItemVO> itemVOList = new ArrayList<>();
