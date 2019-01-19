@@ -186,3 +186,7 @@ CREATE TABLE `promo_info` (
     
 - 秒杀进行中已秒杀价购买
     - REST 接口入参格式不匹配，接口就报错了
+
+- 增加测试用例
+    - pom 依赖里只需要有 `spring-boot-starter-test`
+    - 使用 `@RunWith(SpringRunner.class)` `@SpringBootTest` 注解
